@@ -22,7 +22,7 @@
         <div class="form-group mx-sm-1 mb-2">
           <select th:field="*{orderStatus}" class="form-control">
             <option value="">주문상태</option>
-            <option th:each="status : ${T(com.example.spring_order.order.OrderStatus).values()}"
+            <option th:each="status : ${T(com.example.spring_shopping.order.OrderStatus).values()}"
                     th:value="${status}"
                     th:text="${status}">option
             </option>
@@ -51,7 +51,7 @@
 
         <td>
           <a th:href="@{/orderitems(id=${order.id})}" class="btn btn-secondary">상세보기</a>
-          <a th:if="${order.status.name() == 'ORDER'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
+          <a th:if="${order.status.name() == 'ORDERED'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
              class="btn btn-danger">CANCEL</a>
         </td>
 
