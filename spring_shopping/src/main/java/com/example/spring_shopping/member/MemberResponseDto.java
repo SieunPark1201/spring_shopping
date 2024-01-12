@@ -1,20 +1,25 @@
 package com.example.spring_shopping.member;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class MemberResponseDto {
 
-    public Long id;
+
+    private Long id;
     private String name;
     private String email;
     private String password;
     private String city;
     private String street;
-    private String zipcode;
-    private Long ordercount;
+    private int zipcode;
+    private LocalDateTime createDate;
+    private Long orderCount;
     private Long total;
 
 }

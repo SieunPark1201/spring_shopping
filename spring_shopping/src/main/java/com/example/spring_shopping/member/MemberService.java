@@ -1,41 +1,39 @@
 package com.example.spring_shopping.member;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityNotFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class MemberService {
+public class MemberService{
+
     @Autowired
     MemberRepository memberRepository;
 
-
-    // Create
-    public void member_save(MemberRequestDto member){
-        Address address = new Address(member.getCity(), member.getStreet(),member.getZipcode());
+    // create
+    public void createMember(MemberRequestDto memberRequestDto){
+        Address address = new Address(memberRequestDto.getCity(), memberRequestDto.getZipcode(), memberRequestDto.getStreet());
         Member member1 = Member.builder()
-                .name(member.getName())
-                .email(member.getEmail())
-                .password(member.getPassword())
+                .name(memberRequestDto.getName())
+                .email(memberRequestDto.getEmail())
+                .password(memberRequestDto.getPassword())
                 .address(address)
                 .build();
 
         memberRepository.save(member1);
-
     }
 
-    // Read_all
-
-    public List<Member> member_findall(){
+    //readAll
+    public List<Member> memberFindAll(){
         return memberRepository.findAll();
     }
 
-    // Read_one
-    public Member find_one(Long id){
+    //readOne
+
+    public Member memberFindOne(Long id) {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
 }

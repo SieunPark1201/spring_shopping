@@ -1,42 +1,49 @@
 package com.example.spring_shopping.items;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class ItemService {
+public class ItemService{
 
     @Autowired
     ItemRepository itemRepository;
 
-    // create
-    public void item_save(ItemDto item) {
 
+//    create
+    public void itemCreate(ItemDto item){
         Item item1 = Item.builder()
+                .id(item.getId())
                 .name(item.getName())
                 .price(item.getPrice())
                 .stockQuantity(item.getStockQuantity())
                 .build();
-        itemRepository.save(item1);
 
+        itemRepository.save(item1);
     }
 
-    // read_all
-    public List<Item> item_findall() {
+
+
+//    findAll
+    public List<Item> itemsFindAll() {
         return itemRepository.findAll();
     }
 
-    // read_one
-    public Item item_one(Long id) {
+
+//    findOne
+    public Item itemsFindOne(Long id){
         return itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    // update
-    public void update(ItemDto item) throws Exception {
+
+//    update
+    public void itemUpdate(ItemDto item) throws Exception{
         Item item1 = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
 
-        if (item1 == null) {
+        if (item1 == null){
             throw new Exception();
         } else {
 
@@ -44,11 +51,12 @@ public class ItemService {
             itemRepository.save(item1);
 
         }
-
     }
 
-    public void ItemDelete(Long id) {
-        itemRepository.delete(this.item_one(id));
+//    delete
+    public void itemDelete(Long id) {
+        itemRepository.deleteById(id);
     }
+
 
 }

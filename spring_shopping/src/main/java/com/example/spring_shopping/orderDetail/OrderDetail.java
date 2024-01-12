@@ -2,35 +2,37 @@ package com.example.spring_shopping.orderDetail;
 
 
 import com.example.spring_shopping.items.Item;
-import com.example.spring_shopping.order.Order;
+import com.example.spring_shopping.orders.Orders;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
-public class OrderDetail {
+public class OrderDetail{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private long id;
 
     @Column
-    private Long orderPrice;  // 주문가격
+    private long orderPrice;
+
     @Column
-    private Long count; // 주문수량
+    private long count;
+
+    @Column
+    private LocalDateTime createDate;
 
 
 
-
-    // 주문아이템 : 아이템 = N : 1
-    @ManyToOne(fetch = FetchType.LAZY)   // ★ 주문확인
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="item_id")
     private Item item;   // 주문아이템
 
@@ -39,30 +41,19 @@ public class OrderDetail {
 
     // 주문아이템 : 주문 = N : 1
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name="order_id")
-    private Order customerOrder;   // 주문정보
-
-
-
-    @Column
-    private LocalDateTime createDate;
-
-
-
+    @JoinColumn(nullable = false, name="orders_id")
+    private Orders orders;   // 주문정보
 
 
 
 
     @Builder
-    public OrderDetail(Long orderPrice, Long count, Item item, Order customerOrder) throws Exception {
-
+    public OrderDetail(long orderPrice, long count, Item item, Orders orders){
         this.orderPrice = orderPrice;
-        this.count = count;
-        this.item = item;
+        this.count =count;
         this.item.removeQuantity(count);
-        this.customerOrder = customerOrder;
+        this.orders = orders;
         this.createDate = LocalDateTime.now();
-
-
     }
+
 }

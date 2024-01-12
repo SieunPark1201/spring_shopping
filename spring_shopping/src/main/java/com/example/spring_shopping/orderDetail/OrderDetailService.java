@@ -3,40 +3,41 @@ package com.example.spring_shopping.orderDetail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityNotFoundException;
-
-
 import java.util.List;
 
 @Service
 public class OrderDetailService {
 
     @Autowired
-    OrderDetailRepository orderItemRepository;
+    OrderDetailRepository orderDetailRepository;
 
 
     // create
-    public void orderItemSave(OrderDetailDto orderItemDto) throws Exception {
+    public void createOrderDetail(OrderDetailDto orderDetailDto) throws Exception {
 
         OrderDetail orderItems = OrderDetail.builder()
-                .orderPrice(orderItemDto.getItemId().getPrice())
-                .count(orderItemDto.getCount())
-                .item(orderItemDto.getItemId())
-                .customerOrder(orderItemDto.getCustomerOrder())
+                .orderPrice(orderDetailDto.getItemId().getPrice())
+                .count(orderDetailDto.getCount())
+                .item(orderDetailDto.getItemId())
+                .orders(orderDetailDto.getCustomerOrder())
                 .build();
-        orderItemRepository.save(orderItems);
+        orderDetailRepository.save(orderItems);
     }
 
 
     // read_all
-    public List<OrderDetail> order_find_all(){
+    public List<OrderDetail> orderDetailFindAll(){
 
-        List<OrderDetail> orderItems = orderItemRepository.findAll();
-        return orderItemRepository.findAll();
+        List<OrderDetail> orderItems = orderDetailRepository.findAll();
+        return orderDetailRepository.findAll();
     }
 
     //read_one
-    public OrderDetail order_find_one(Long id){
-        return orderItemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public OrderDetail orderDetailFindOne(Long id){
+        return orderDetailRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+
 }
