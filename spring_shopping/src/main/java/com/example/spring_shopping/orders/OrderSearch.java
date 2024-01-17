@@ -1,4 +1,5 @@
-package com.example.spring_shopping.order;
+package com.example.spring_shopping.orders;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderSearch {
+
 
     private String memberName;
     private OrderStatus orderStatus;

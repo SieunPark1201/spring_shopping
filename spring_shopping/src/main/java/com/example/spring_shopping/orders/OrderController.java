@@ -1,14 +1,9 @@
-package com.example.spring_shopping.order;
+package com.example.spring_shopping.orders;
 
 
-import com.example.spring_shopping.items.Item;
-import com.example.spring_shopping.items.ItemRepository;
 import com.example.spring_shopping.items.ItemService;
 import com.example.spring_shopping.member.MemberService;
-import com.example.spring_shopping.orderDetail.OrderDetail;
-import com.example.spring_shopping.orderDetail.OrderDetailDto;
 import com.example.spring_shopping.orderDetail.OrderDetailRepository;
-import com.example.spring_shopping.orderDetail.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.util.List;
 
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -29,30 +24,30 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
-    OrderDetailRepository orderItemRepository;
+    OrderDetailRepository orderDetailRepository;
     @Autowired
-    OrderRepository customerOrderRepository;
+    OrderRepository orderRepository;
 
     @GetMapping("order")
-    public String order_new(Model model) {
-        model.addAttribute("items", itemService.item_findall());
-        model.addAttribute("members", memberService.member_findall());
+    public String orderNew(Model model) {
+        model.addAttribute("items", itemService.itemsFindAll());
+        model.addAttribute("members", memberService.memberFindAll());
 
         return "order/orderForm";
     }
 
     @PostMapping("order")
-    public String order_regist(OrderDto order) throws Exception {
+    public String orderRegister(OrderDto order) throws Exception {
 
         // Customer_Order저장 → Order_Item 저장
-        orderService.order_save(order);
+        orderService.createOrder(order);
         return "redirect:/orders";
     }
 
     // 주문 List 화면 호출
     @GetMapping("orders")  // @ModelAttribute("맵핑 이름")할 경우 이름을 다르게 해도 됨 명시적으로 OrderSearchDto와 맵핑을 할 수 있다.
     public String orderList(Model model, OrderSearch orderSearch) {
-        List<Order> orderList = orderService.order_find_search(orderSearch);
+        List<Orders> orderList = orderService.ordersSearch(orderSearch);
         model.addAttribute("orders", orderList);
         return "order/orderList";
     }
@@ -61,14 +56,14 @@ public class OrderController {
     // 주문 cancel
     @PostMapping("orders/{id}/cancel")
     public String orderCancel(@PathVariable("id") Long myid) throws Exception {
-        orderService.order_change_status(myid);
+        orderService.orderUpdate(myid);
         return "redirect:/orders";
     }
 
     //orderDetail
     @GetMapping("orderitems")
     public String orderdetail(@RequestParam(value = "id") Long myid, Model model) {
-        model.addAttribute("order_items", orderItemRepository.findByCustomerOrderId(myid));
+        model.addAttribute("order_items", orderDetailRepository.findByOrders(myid));
         return "order/orderDetail";
     }
 
@@ -76,9 +71,8 @@ public class OrderController {
     // 주문 List 화면 호출
     @GetMapping("/orders/member")
     public String orderListmem(Model model, @RequestParam(value = "id") Long myid, OrderSearch orderSearch) {
-        List<Order> orderList = customerOrderRepository.findByMemberId(myid);
+        List<Orders> orderList = orderRepository.findByMemberId(myid);
         model.addAttribute("orders", orderList);
         return "order/orderList";
     }
-
 }

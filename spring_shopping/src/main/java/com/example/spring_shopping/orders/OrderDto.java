@@ -1,5 +1,4 @@
-package com.example.spring_shopping.order;
-
+package com.example.spring_shopping.orders;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
